@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Library</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= link_to "Autores", authors_path %> |
+    <%= link_to "Libros", books_path %> |
+    <%= link_to "Categorías", categories_path %> <br>
+    <!-- <strong>Usuario logueado:</strong> <%= session[:user_logged] %><br><br> -->
+    <%= yield %>
+  </body>
+</html>
