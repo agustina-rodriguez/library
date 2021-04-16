@@ -4,6 +4,8 @@ class CategoriesController < ApplicationController
   # GET /categories or /categories.json
   def index
     @categories = Category.all
+    @categories = @categories.joins(:books).where(:books => {:id => params[:book_id]}) if params[:book_id]
+    @categories = @categories.order(params[:by] + " " + params[:order]) if params[:sort] == "true"
   end
 
   # GET /categories/1 or /categories/1.json

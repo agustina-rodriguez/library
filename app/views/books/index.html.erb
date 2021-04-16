@@ -7,13 +7,22 @@
   <input type="submit">
 </form><br>
 <!-- Esto sirve para poner un buscador (como filtro) en 'Libros' -->
+<form method="GET" action="/categories">
+  Categoría: <select name="category_id">
+    <%= Category.all.each do | c | %>
+    <option value= "<%= c.id %>"> <%=c.name %> </option>
+    <% end %>
+    </select>
+</form><br>
+
 
 <table>
   <thead>
     <tr>
-      <th>Title</th>
+      <th><%= link_to "Title", books_path(:sort => true, :by => "title", :order => (params[:order] == "asc" ? "desc" : "asc")) %></th>
       <th>Description</th>
-      <th>Category</th>
+      <th>Categoría</th>
+      <th>Autores</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -23,7 +32,21 @@
       <tr>
         <td><%= book.title %></td>
         <td><%= book.description %></td>
-        <td><%= book.category_id %></td>
+
+        <td>
+          <%= link_to book.category_id, categories_path(:book_id => book.id) %>
+        </td>
+
+        <td>
+          <% if book.authors.count == 0 %>
+          <%# Si el libro no fue escrito por ningún autor que muestre 0 %>
+          <%= book.authors.count %>
+          <% else %>
+          <%# sino, que me ponga un link que me lleve hasta los autores %>
+          <%= link_to book.authors.count, authors_path(:book_id => book.id) %>
+          <% end %>
+        </td>
+
         <td><%= link_to 'Show', book %></td>
         <td><%= link_to 'Edit', edit_book_path(book) %></td>
         <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -6,4 +6,7 @@ class Book < ApplicationRecord
   # El título del libro no puede ser nulo y debe ser único.
   validates :description, :presence => true
   # La descripción del libro no puede ser nula.
+  def is_new
+    created_at.today? ? "new!" : ""
+  end
 end

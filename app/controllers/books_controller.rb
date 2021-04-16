@@ -4,19 +4,16 @@ class BooksController < ApplicationController
   # GET /books or /books.json
   def index
     @books = Book.all
+    @books = @books.where(:category_id => params[:category_id]) if params[:category_id]
+    # junto con el index de categories es para que muestre los libros que pertenecen a dicha categoría.
+    @books = @books.joins(:authors).where(:authors => {:id => params[:author_id]}) if params[:author_id]
+    # Mostrar los libros escritos que escribió el autor que elegimos DESDE autor.
+    @books = @books.order(params[:by] + " " + params[:order]) if params[:sort] == "true"
+    # orden de libros + el orden del index.
     @books = @books.where(["title LIKE :filter", :filter => ("%" + params[:filter] + "%")]) unless params[:filter].blank?
-    # Esto sirve para pasarle un literal, es decir, el LIKE es para que el filter al que hacíamos referencia antes tenga ese valor
-    # ES DECIR, poniendo 'filter = cera' me va a aparecer el libro Sinceramiento porque contiene en su nombre,'cera'.
-    # A esto se le llama búsqueda blanda.
-
-
-
-    # @books = @books.where(:title => params[:filter]) unless params[:filter].blank?
-    # Donde el título sea igual a algo que le pase por parámetro a no ser que el parámetro esté en blanco.
-    # Si no pasamos ningún param. entonces muestra todo.
-    # Vos pedís que el filtro se llame 'filter', se puede cambiar.
-    # Si en lugar de  filter pusiera chocolate, entonces tambiéns sería un filtro pero con el nombre elegido por mí.
-    # A esto se le llama búsqueda estricta.
+# buscador de libros según título.
+    # @books = @books.where(["category_id LIKE :filter2", :filter2 => ("%" + params[:filter2] + "%")]) unless params[:filter2].blank?
+    @books = @books.where(:category_id => params[:category_id]) if params[:category_id]
   end
 
   # GET /books/1 or /books/1.json
